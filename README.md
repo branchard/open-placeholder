@@ -219,6 +219,9 @@ pnpm build
 # Run production build
 pnpm start
 
+# Build and test image endpoints
+pnpm test
+
 # Run linter
 pnpm lint
 ```
