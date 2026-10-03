@@ -38,6 +38,9 @@ export async function GET(_request: Request, { params }: { params: Params }) {
   const textLength = displayText.length;
   const fontSizeMultiplier = textLength > 20 ? 0.6 : textLength > 10 ? 0.8 : 1;
   const fontSize = baseFontSize * fontSizeMultiplier;
+  // Keep room for text even when the image is smaller than the usual padding.
+  // Satori's word wrapping can loop if a single glyph exceeds the content width.
+  const padding = Math.min(20, Math.min(options.width, options.height) / 4);
   
   // Use cached font data
   const fontData = await getFontData();
@@ -53,7 +56,7 @@ export async function GET(_request: Request, { params }: { params: Params }) {
           height: '100%',
           backgroundColor: '#EEE',
           color: '#31343C',
-          padding: '20px',
+          padding,
         }}
       >
         <h1 
