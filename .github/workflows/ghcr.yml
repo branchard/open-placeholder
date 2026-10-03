@@ -51,22 +51,12 @@ jobs:
       - name: Smoke test
         run: |
           for i in $(seq 1 30); do
-            curl -sf -o /dev/null http://localhost:3000/ && break
+            curl -sf --max-time 2 -o /dev/null http://localhost:3000/ && break
             sleep 1
           done
 
-          check() {
-            local path="$1" expected_type="$2"
-            local type
-            type=$(curl -sf -o /dev/null -w '%{content_type}' "http://localhost:3000$path")
-            echo "$path -> $type"
-            [[ "$type" == "$expected_type"* ]]
-          }
-
-          check / text/html
-          check /600x400 image/png
-          check /512 image/png
-          check /600x400/Hello%20World image/png
+          curl -sf --max-time 5 http://localhost:3000/ -o /dev/null
+          PLACEHOLDER_BASE_URL=http://localhost:3000 node --test tests/*.test.mjs
 
       - name: Container logs
         if: always()

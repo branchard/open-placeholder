@@ -11,3 +11,4 @@ CODE_OF_CONDUCT.md
 .vercel
 Dockerfile
 .dockerignore
+.env*
